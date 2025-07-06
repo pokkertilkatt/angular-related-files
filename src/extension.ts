@@ -12,6 +12,9 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Extension "angular-related-files" is now active!');
 
+  // State to keep track of active cycle lists
+  const activeCycles: { [key: string]: { cycleList: string[]; currentIndex: number } } = {};
+
   const showCommand = vscode.commands.registerCommand('angular-related-files.show', async () => {
   
     // 1. Get the currently active text editor
@@ -91,29 +94,50 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     const baseName = `${baseNameMatch[1]}.${baseNameMatch[2]}`;
+    const stateKey = path.join(dirName, baseName);
 
-    // Priority order for file types
-    const priorityOrder = ['.html', '.ts', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts'];
+    let fileToOpen: string;
+    const activeCycle = activeCycles[stateKey];
 
-    const allRelatedFiles: string[] = [];
-    for (const ext of priorityOrder) {
-        const potentialFile = path.join(dirName, baseName + ext);
-        if (fs.existsSync(potentialFile)) {
-            allRelatedFiles.push(potentialFile);
+    // Check if we are continuing an existing cycle
+    if (activeCycle && activeCycle.cycleList[activeCycle.currentIndex] === currentFilePath) {
+        const nextIndex = (activeCycle.currentIndex + 1) % activeCycle.cycleList.length;
+        activeCycles[stateKey].currentIndex = nextIndex;
+        fileToOpen = activeCycle.cycleList[nextIndex];
+    } else {
+        // Start a new cycle
+        const priorityOrder = ['.html', '.ts', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts'];
+        const sortedFiles: string[] = [];
+        for (const ext of priorityOrder) {
+            const potentialFile = path.join(dirName, baseName + ext);
+            if (fs.existsSync(potentialFile)) {
+                sortedFiles.push(potentialFile);
+            }
         }
-    }
 
-    if (allRelatedFiles.length < 2) {
-        return; // Not enough files to cycle
-    }
+        if (sortedFiles.length < 2) {
+            return; // Not enough files to cycle
+        }
 
-    const currentIndex = allRelatedFiles.indexOf(currentFilePath);
-    if (currentIndex === -1) {
-        return; // Should not happen if logic is correct
-    }
+        const currentFileIndexInSorted = sortedFiles.indexOf(currentFilePath);
+        if (currentFileIndexInSorted === -1) {
+            return;
+        }
 
-    const nextIndex = (currentIndex + 1) % allRelatedFiles.length;
-    const fileToOpen = allRelatedFiles[nextIndex];
+        // Create the new cycle list by moving the current file to the end
+        const newCycleList = [
+            ...sortedFiles.slice(0, currentFileIndexInSorted),
+            ...sortedFiles.slice(currentFileIndexInSorted + 1),
+            sortedFiles[currentFileIndexInSorted]
+        ];
+
+        activeCycles[stateKey] = {
+            cycleList: newCycleList,
+            currentIndex: 0 // Start at the beginning of the new cycle
+        };
+
+        fileToOpen = newCycleList[0];
+    }
 
     const uri = vscode.Uri.file(fileToOpen);
     const document = await vscode.workspace.openTextDocument(uri);
