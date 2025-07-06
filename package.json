@@ -1,0 +1,71 @@
+{
+  "name": "angular-related-files",
+  "displayName": "Angular Related Files",
+  "description": "Quickly switch between related Angular component, service, and directive files",
+  "version": "0.0.1",
+  "publisher": "jigglyBits",
+  "engines": {
+    "vscode": "^1.101.0"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "angular-related-files.show",
+        "title": "Show Related Angular Files",
+        "icon": {
+          "light": "resources/light/files.svg",
+          "dark": "resources/dark/files.svg"
+        }
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "angular-related-files.show",
+        "key": "alt+o",
+        "mac": "alt+o",
+        "when": "editorTextFocus && (resourceLangId == typescript || resourceLangId == html || resourceLangId == scss || resourceLangId == css || resourceLangId == less || resourceLangId == sass)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "when": "resourceLangId == typescript || resourceLangId == html || resourceLangId == scss || resourceLangId == css || resourceLangId == less || resourceLangId == sass",
+          "command": "angular-related-files.show",
+          "group": "navigation"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "when": "resourceLangId == typescript || resourceLangId == html || resourceLangId == scss || resourceLangId == css || resourceLangId == less || resourceLangId == sass",
+          "command": "angular-related-files.show",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.101.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "mocha": "^10.1.0"
+  }
+}
