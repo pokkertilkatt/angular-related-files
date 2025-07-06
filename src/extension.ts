@@ -12,7 +12,10 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Extension "angular-related-files" is now active!');
 
-  const disposable = vscode.commands.registerCommand('angular-related-files.show', async () => {
+  // State to keep track of the last opened file index for each component
+  const cycleState: { [key: string]: number } = {};
+
+  const showCommand = vscode.commands.registerCommand('angular-related-files.show', async () => {
   
     // 1. Get the currently active text editor
     const activeEditor = vscode.window.activeTextEditor;
@@ -75,7 +78,65 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
 
-	context.subscriptions.push(disposable);
+  const cycleCommand = vscode.commands.registerCommand('angular-related-files.cycle', async () => {
+    const activeEditor = vscode.window.activeTextEditor;
+    if (!activeEditor) {
+        return;
+    }
+
+    const currentFilePath = activeEditor.document.uri.fsPath;
+    const dirName = path.dirname(currentFilePath);
+    const parsedPath = path.parse(currentFilePath);
+    const baseNameMatch = parsedPath.name.match(/^([^.]+)\.(component|service|directive|pipe|guard|module|resolver)/);
+
+    if (!baseNameMatch) {
+        return; // Not a recognized file, do nothing silently
+    }
+
+    const baseName = `${baseNameMatch[1]}.${baseNameMatch[2]}`;
+    const stateKey = path.join(dirName, baseName);
+
+    // Priority order for file types
+    const priority = ['.html', '.ts', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts'];
+    const relatedExtensions = ['.ts', '.html', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts'];
+
+    const relatedFiles: string[] = [];
+    for (const ext of relatedExtensions) {
+        const potentialFile = path.join(dirName, baseName + ext);
+        if (fs.existsSync(potentialFile) && potentialFile !== currentFilePath) {
+            relatedFiles.push(potentialFile);
+        }
+    }
+
+    if (relatedFiles.length === 0) {
+        return; // No other related files found
+    }
+
+    // Sort files based on the priority list
+    relatedFiles.sort((a, b) => {
+        const extA = path.extname(a.replace('.spec.ts', '.spec.ts-dummy')); // Handle .spec.ts correctly
+        const extB = path.extname(b.replace('.spec.ts', '.spec.ts-dummy'));
+        return priority.indexOf(extA) - priority.indexOf(extB);
+    });
+
+    // Get the next file index to open
+    let nextIndex = cycleState[stateKey] === undefined ? 0 : cycleState[stateKey] + 1;
+    if (nextIndex >= relatedFiles.length) {
+        nextIndex = 0; // Cycle back to the start
+    }
+
+    const fileToOpen = relatedFiles[nextIndex];
+    cycleState[stateKey] = nextIndex; // Update state for the next cycle
+
+    const uri = vscode.Uri.file(fileToOpen);
+    const document = await vscode.workspace.openTextDocument(uri);
+    await vscode.window.showTextDocument(document, {
+        viewColumn: vscode.ViewColumn.Active,
+        preview: false
+    });
+  });
+
+	context.subscriptions.push(showCommand, cycleCommand);
 }
 
 // This method is called when your extension is deactivated

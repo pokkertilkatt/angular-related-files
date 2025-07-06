@@ -21,11 +21,15 @@
           "light": "resources/light/files.svg",
           "dark": "resources/dark/files.svg"
         }
+      },
+      {
+        "command": "angular-related-files.cycle",
+        "title": "Cycle Related Angular Files"
       }
     ],
     "keybindings": [
       {
-        "command": "angular-related-files.show",
+        "command": "angular-related-files.cycle",
         "key": "alt+o",
         "mac": "alt+o",
         "when": "editorTextFocus && (resourceLangId == typescript || resourceLangId == html || resourceLangId == scss || resourceLangId == css || resourceLangId == less || resourceLangId == sass)"
