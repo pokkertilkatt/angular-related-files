@@ -13,6 +13,21 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Angular Related Files",
+      "properties": {
+        "angular-related-files.showTabBarButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the 'Show Related Angular Files' button in the editor title bar."
+        },
+        "angular-related-files.ignore": {
+          "type": "array",
+          "default": [],
+          "description": "A list of file patterns to ignore when searching for related files."
+        }
+      }
+    },
     "commands": [
       {
         "command": "angular-related-files.show",
@@ -38,7 +53,7 @@
     "menus": {
       "editor/title": [
         {
-          "when": "resourceLangId == typescript || resourceLangId == html || resourceLangId == scss || resourceLangId == css || resourceLangId == less || resourceLangId == sass",
+          "when": "(resourceLangId == typescript || resourceLangId == html || resourceLangId == scss || resourceLangId == css || resourceLangId == less || resourceLangId == sass) && config.angular-related-files.showTabBarButton",
           "command": "angular-related-files.show",
           "group": "navigation"
         }
