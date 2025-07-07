@@ -31,15 +31,20 @@ export function activate(context: vscode.ExtensionContext) {
   // State to keep track of active cycle lists
   const activeCycles: { [key: string]: { cycleList: string[]; currentIndex: number } } = {};
 
-  const showCommand = vscode.commands.registerCommand('angular-related-files.show', async () => {
+  const showCommand = vscode.commands.registerCommand('angular-related-files.show', async (uri?: vscode.Uri) => {
   
     // 1. Get the currently active text editor
     const activeEditor = vscode.window.activeTextEditor;
-    if (!activeEditor) {
-        return; // No editor is open
+    
+    // Determine the file path from the provided URI or the active editor
+    let currentFilePath: string;
+    if (uri) {
+        currentFilePath = uri.fsPath;
+    } else if (activeEditor) {
+        currentFilePath = activeEditor.document.uri.fsPath;
+    } else {
+        return; // No file context available
     }
-
-    const currentFilePath = activeEditor.document.uri.fsPath;
     const dirName = path.dirname(currentFilePath);
 
     // 2. Parse the file name to find its base.
