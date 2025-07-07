@@ -4,6 +4,22 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 
+// Helper function to check if a file should be ignored based on glob patterns
+function isIgnored(filePath: string, ignorePatterns: string[]): boolean {
+    const fileName = path.basename(filePath);
+    for (const pattern of ignorePatterns) {
+        // Simple glob implementation: *.test.ts -> endsWith('.test.ts')
+        if (pattern.startsWith('*') && fileName.endsWith(pattern.substring(1))) {
+            return true;
+        }
+        // Exact match
+        if (pattern === fileName) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -39,16 +55,20 @@ export function activate(context: vscode.ExtensionContext) {
     // e.g. "my-component.component"
     const baseName = `${baseNameMatch[1]}.${baseNameMatch[2]}`;
 
-    // 3. Define all potential related file extensions
+    // 3. Get ignore settings from configuration
+    const config = vscode.workspace.getConfiguration('angular-related-files');
+    const ignorePatterns = config.get<string[]>('ignore', []);
+
+    // 4. Define all potential related file extensions
     const relatedExtensions = ['.ts', '.html', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts'];
 
-    // 4. Find all existing files in the same directory that match the base name
+    // 5. Find all existing files in the same directory that match the base name
     const relatedFiles: { label: string; filePath: string }[] = [];
 
     for (const ext of relatedExtensions) {
         const potentialFile = path.join(dirName, baseName + ext);
-        // Check if the file exists and is not the one we currently have open
-        if (fs.existsSync(potentialFile) && potentialFile !== currentFilePath) {
+        // Check if the file exists, is not the one we currently have open, and is not ignored
+        if (fs.existsSync(potentialFile) && potentialFile !== currentFilePath && !isIgnored(potentialFile, ignorePatterns)) {
             relatedFiles.push({
                 label: path.basename(potentialFile), // The file name to display in the list
                 filePath: potentialFile // The full path to the file
@@ -106,11 +126,13 @@ export function activate(context: vscode.ExtensionContext) {
         fileToOpen = activeCycle.cycleList[nextIndex];
     } else {
         // Start a new cycle
+        const config = vscode.workspace.getConfiguration('angular-related-files');
+        const ignorePatterns = config.get<string[]>('ignore', []);
         const priorityOrder = ['.html', '.ts', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts'];
         const sortedFiles: string[] = [];
         for (const ext of priorityOrder) {
             const potentialFile = path.join(dirName, baseName + ext);
-            if (fs.existsSync(potentialFile)) {
+            if (fs.existsSync(potentialFile) && !isIgnored(potentialFile, ignorePatterns)) {
                 sortedFiles.push(potentialFile);
             }
         }

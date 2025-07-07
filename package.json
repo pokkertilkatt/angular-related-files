@@ -24,7 +24,7 @@
         "angular-related-files.ignore": {
           "type": "array",
           "default": [],
-          "description": "A list of file patterns to ignore when searching for related files."
+          "description": "A list of glob patterns to ignore when searching for related files (e.g., \"*.spec.ts\", \"*.module.ts\")."
         }
       }
     },
