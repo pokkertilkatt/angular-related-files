@@ -20,6 +20,21 @@ function isIgnored(filePath: string, ignorePatterns: string[]): boolean {
     return false;
 }
 
+const SHARED_EXTENSIONS = ['.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts', '.types.ts'];
+const SHOW_EXTENSIONS = ['.ts', '.html', ...SHARED_EXTENSIONS];
+const CYCLE_PRIORITY_ORDER = ['.html', '.ts', ...SHARED_EXTENSIONS];
+
+function findRelatedFiles(dirName: string, baseName: string, extensions: string[], ignorePatterns: string[]): string[] {
+    const relatedFiles: string[] = [];
+    for (const ext of extensions) {
+        const potentialFile = path.join(dirName, baseName + ext);
+        if (fs.existsSync(potentialFile) && !isIgnored(potentialFile, ignorePatterns)) {
+            relatedFiles.push(potentialFile);
+        }
+    }
+    return relatedFiles;
+}
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -64,22 +79,12 @@ export function activate(context: vscode.ExtensionContext) {
     const config = vscode.workspace.getConfiguration('angular-related-files');
     const ignorePatterns = config.get<string[]>('ignore', []);
 
-    // 4. Define all potential related file extensions
-    const relatedExtensions = ['.ts', '.html', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts', '.types.ts'];
+    // 4. Find all existing files in the same directory that match the base name
+    const allRelatedFiles = findRelatedFiles(dirName, baseName, SHOW_EXTENSIONS, ignorePatterns);
 
-    // 5. Find all existing files in the same directory that match the base name
-    const relatedFiles: { label: string; filePath: string }[] = [];
-
-    for (const ext of relatedExtensions) {
-        const potentialFile = path.join(dirName, baseName + ext);
-        // Check if the file exists, is not the one we currently have open, and is not ignored
-        if (fs.existsSync(potentialFile) && potentialFile !== currentFilePath && !isIgnored(potentialFile, ignorePatterns)) {
-            relatedFiles.push({
-                label: path.basename(potentialFile), // The file name to display in the list
-                filePath: potentialFile // The full path to the file
-            });
-        }
-    }
+    const relatedFiles = allRelatedFiles
+        .filter(f => f !== currentFilePath)
+        .map(f => ({ label: path.basename(f), filePath: f }));
 
     if (relatedFiles.length === 0) {
         vscode.window.showInformationMessage('No related files found.');
@@ -133,14 +138,7 @@ export function activate(context: vscode.ExtensionContext) {
         // Start a new cycle
         const config = vscode.workspace.getConfiguration('angular-related-files');
         const ignorePatterns = config.get<string[]>('ignore', []);
-        const priorityOrder = ['.html', '.ts', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts', '.types.ts'];
-        const sortedFiles: string[] = [];
-        for (const ext of priorityOrder) {
-            const potentialFile = path.join(dirName, baseName + ext);
-            if (fs.existsSync(potentialFile) && !isIgnored(potentialFile, ignorePatterns)) {
-                sortedFiles.push(potentialFile);
-            }
-        }
+        const sortedFiles = findRelatedFiles(dirName, baseName, CYCLE_PRIORITY_ORDER, ignorePatterns);
 
         if (sortedFiles.length < 2) {
             return; // Not enough files to cycle
