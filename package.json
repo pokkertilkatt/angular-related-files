@@ -47,7 +47,7 @@
         "command": "angular-related-files.cycle",
         "key": "alt+o",
         "mac": "alt+o",
-        "when": "editorTextFocus && (resourceLangId == typescript || resourceLangId == html || resourceLangId == scss || resourceLangId == css || resourceLangId == less || resourceLangId == sass)"
+        "when": "resourceScheme == file && (resourceLangId == typescript || resourceLangId == html || resourceLangId == scss || resourceLangId == css || resourceLangId == less || resourceLangId == sass)"
       }
     ],
     "menus": {
