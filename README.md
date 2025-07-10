@@ -1,71 +1,42 @@
-# angular-related-files README
+# Angular Related Files
 
-This is the README for your extension "angular-related-files". After writing up a brief description, we recommend including the following sections.
+Navigate between your Angular files with ease! This VS Code extension helps you quickly switch between related component, service, directive, and other files without searching through the file explorer.
+
+![Angular Related Files Icon](resources/dark/angular-files-icon.svg)
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Show Related Files**: Instantly see a list of all related files (e.g., `.ts`, `.html`, `.scss`, `.spec.ts`) and jump to any of them.
+- **Cycle Through Files**: Use a simple keybinding (`Alt+O`) to cycle through all related files in a logical order, perfect for quick edits.
+- **Configurable**: Customize the extension to ignore certain file patterns.
 
-For example if there is an image subfolder under your extension project workspace:
+## How to Use
 
-\!\[feature X\]\(images/feature-x.png\)
+### Show Related Files
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+Click the icon in the editor title bar to open a dropdown list of all related files. Select a file from the list to open it.
 
-## Requirements
+*(You can add a GIF here showing this feature in action)*
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+### Cycle Related Files
 
-## Extension Settings
+Press `Alt+O` (`Option+O` on macOS) to instantly switch to the next related file. The cycle order is prioritized for common workflows: `.html` -> `.ts` -> `.scss` -> `.spec.ts`, etc.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+## Configuration
 
-For example:
+You can customize the extension's behavior through your VS Code settings (`settings.json`):
 
-This extension contributes the following settings:
+- **`angular-related-files.showTabBarButton`**: Show or hide the "Show Related Angular Files" button in the editor title bar.
+  - `true` (default)
+  - `false`
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+- **`angular-related-files.ignore`**: A list of glob patterns to ignore when searching for related files.
+  - Example: `["*.module.ts", "*.spec.ts"]`
 
-## Known Issues
+## Contributing
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Contributions are welcome! If you have ideas for new features or have found a bug, please open an issue or submit a pull request on the [GitHub repository](https://github.com/pokkertilkatt/angular-related-files).
 
 ---
 
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Developed by pokkertilkatt.

@@ -4,12 +4,31 @@
   "description": "Quickly switch between related Angular component, service, and directive files",
   "version": "0.0.1",
   "publisher": "pokkertilkatt",
+  "icon": "resources/dark/angular-files-icon.svg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pokkertilkatt/angular-related-files.git"
+  },
+  "homepage": "https://github.com/pokkertilkatt/angular-related-files/blob/main/README.md",
+  "bugs": {
+    "url": "https://github.com/pokkertilkatt/angular-related-files/issues"
+  },
   "engines": {
     "vscode": "^1.101.0"
   },
   "categories": [
     "Other",
     "Programming Languages"
+  ],
+  "keywords": [
+    "angular",
+    "files",
+    "related",
+    "navigate",
+    "switch",
+    "component",
+    "service",
+    "directive"
   ],
   "main": "./out/extension.js",
   "contributes": {
