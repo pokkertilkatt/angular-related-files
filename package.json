@@ -3,7 +3,7 @@
   "displayName": "Angular Related Files",
   "description": "Quickly switch between related Angular component, service, and directive files",
   "version": "0.0.1",
-  "publisher": "jigglyBits",
+  "publisher": "ThunderBear",
   "engines": {
     "vscode": "^1.101.0"
   },
