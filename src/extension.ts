@@ -50,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
     // 2. Parse the file name to find its base.
     // e.g., 'c:/.../my-component.component.ts' -> baseName = 'my-component.component'
     const parsedPath = path.parse(currentFilePath);
-    const baseNameMatch = parsedPath.name.match(/^([^.]+)\.(component|service|directive|pipe|guard|module|resolver)/);
+    const baseNameMatch = parsedPath.name.match(/(.+)\.(component|service|directive|pipe|guard|module|resolver)/);
 
     if (!baseNameMatch) {
         vscode.window.showInformationMessage('Not a recognized Angular file pattern (e.g., .component.ts, .service.ts)');
@@ -65,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
     const ignorePatterns = config.get<string[]>('ignore', []);
 
     // 4. Define all potential related file extensions
-    const relatedExtensions = ['.ts', '.html', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts'];
+    const relatedExtensions = ['.ts', '.html', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts', '.types.ts'];
 
     // 5. Find all existing files in the same directory that match the base name
     const relatedFiles: { label: string; filePath: string }[] = [];
@@ -112,7 +112,7 @@ export function activate(context: vscode.ExtensionContext) {
     const currentFilePath = activeEditor.document.uri.fsPath;
     const dirName = path.dirname(currentFilePath);
     const parsedPath = path.parse(currentFilePath);
-    const baseNameMatch = parsedPath.name.match(/^([^.]+)\.(component|service|directive|pipe|guard|module|resolver)/);
+    const baseNameMatch = parsedPath.name.match(/(.+)\.(component|service|directive|pipe|guard|module|resolver)/);
 
     if (!baseNameMatch) {
         return; // Not a recognized file, do nothing silently
@@ -133,7 +133,7 @@ export function activate(context: vscode.ExtensionContext) {
         // Start a new cycle
         const config = vscode.workspace.getConfiguration('angular-related-files');
         const ignorePatterns = config.get<string[]>('ignore', []);
-        const priorityOrder = ['.html', '.ts', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts'];
+        const priorityOrder = ['.html', '.ts', '.scss', '.css', '.less', '.sass', '.spec.ts', '.type.ts', '.types.ts'];
         const sortedFiles: string[] = [];
         for (const ext of priorityOrder) {
             const potentialFile = path.join(dirName, baseName + ext);
