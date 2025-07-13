@@ -1,26 +1,24 @@
 # Angular Related Files
 
-Navigate between your Angular files with ease! This VS Code extension helps you quickly switch between related component, service, directive, and other files without searching through the file explorer.
-
-![Angular Related Files Icon](resources/dark/angular-files-icon.svg)
+Switch between related Angular files (like `.ts`, `.html`, `.scss`, `.spec.ts`) using a single shortcut, tab icon, or right-click menu.
 
 ## Features
 
-- **Show Related Files**: Instantly see a list of all related files (e.g., `.ts`, `.html`, `.scss`, `.spec.ts`) and jump to any of them.
-- **Cycle Through Files**: Use a simple keybinding (`Alt+O`) to cycle through all related files in a logical order, perfect for quick edits.
-- **Configurable**: Customize the extension to ignore certain file patterns.
+- **Cycle Related Files**: Press `Alt+O` (`Option+O` on macOS) to cycle through related files in a logical order.
+- **Show Related Files**: Click the tab bar icon or right-click a tab to view and open all related files.
+- **Configurable**: Ignore specific file types or toggle the tab icon in your settings.
 
 ## How to Use
 
+### Cycle with Shortcut
+
+Press `Alt+O` to jump to the next related file. Keep pressing to cycle through `.html`, `.ts`, `.scss`, `.spec.ts`, etc.
+
 ### Show Related Files
 
-Click the icon in the editor title bar to open a dropdown list of all related files. Select a file from the list to open it.
-
-*(You can add a GIF here showing this feature in action)*
-
-### Cycle Related Files
-
-Press `Alt+O` (`Option+O` on macOS) to instantly switch to the next related file. The cycle order is prioritized for common workflows: `.html` -> `.ts` -> `.scss` -> `.spec.ts`, etc.
+- Click the icon in the editor title bar  
+- Or right-click the active tab  
+Then pick a related file from the dropdown list.
 
 ## Configuration
 
