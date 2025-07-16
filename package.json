@@ -40,6 +40,11 @@
           "default": true,
           "description": "Show the 'Show Related Angular Files' button in the editor title bar."
         },
+        "angular-related-files.showInContextMenu": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the 'Show Related Angular Files' option in the context menu."
+        },
         "angular-related-files.ignore": {
           "type": "array",
           "default": [],
@@ -79,7 +84,7 @@
       ],
       "editor/title/context": [
         {
-          "when": "resourceLangId == typescript || resourceLangId == html || resourceLangId == scss || resourceLangId == css || resourceLangId == less || resourceLangId == sass",
+          "when": "(resourceLangId == typescript || resourceLangId == html || resourceLangId == scss || resourceLangId == css || resourceLangId == less || resourceLangId == sass) && config.angular-related-files.showInContextMenu",
           "command": "angular-related-files.show",
           "group": "navigation"
         }
