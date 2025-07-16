@@ -6,6 +6,8 @@ src/**
 vsc-extension-quickstart.md
 **/tsconfig.json
 **/eslint.config.mjs
+resources/dark/angular-files-icon-A-only.svg
+resources/dark/angular-files-icon.svg
 **/*.map
 **/*.ts
 

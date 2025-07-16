@@ -28,6 +28,10 @@ You can customize the extension's behavior through your VS Code settings (`setti
   - `true` (default)
   - `false`
 
+- **`angular-related-files.showInContextMenu`**: Show or hide the "Show Related Angular Files" option in the context menu.
+  - `true` (default)
+  - `false`
+
 - **`angular-related-files.ignore`**: A list of glob patterns to ignore when searching for related files.
   - Example: `["*.module.ts", "*.spec.ts"]`
 
