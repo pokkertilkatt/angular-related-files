@@ -33,7 +33,7 @@ You can customize the extension's behavior through your VS Code settings (`setti
   - `false`
 
 - **`angular-related-files.ignore`**: A list of glob patterns to ignore when searching for related files.
-  - Example: `["*.module.ts", "*.spec.ts"]`
+  - Example: `["**/*.spec.ts", "*.module.ts"]`
 
 ## Contributing
 
