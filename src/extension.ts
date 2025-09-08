@@ -44,11 +44,13 @@ async function findRelatedFiles(dirName: string, baseName: string, ignorePattern
 }
 
 async function openF(filePath: string) {
+    const config = vscode.workspace.getConfiguration('angular-related-files');
+    const openInPreview = config.get<boolean>('openInPreview', true);
     const uri = vscode.Uri.file(filePath);
     const document = await vscode.workspace.openTextDocument(uri);
     await vscode.window.showTextDocument(document, {
         viewColumn: vscode.ViewColumn.Active,
-        preview: false,
+        preview: openInPreview,
     });
 }
 

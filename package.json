@@ -2,7 +2,7 @@
   "name": "angular-related-files",
   "displayName": "Angular Related Files",
   "description": "Cycle through related Angular files with one shortcut (ALT+O), or see all related files by right-clicking a tab or clicking the icon in the tab bar",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "pokkertilkatt",
   "icon": "resources/dark/angular-related-files-product-icon.png",
   "repository": {
@@ -53,6 +53,11 @@
           "type": "array",
           "default": [],
           "description": "A list of glob patterns to ignore when searching for related files (e.g., \"*.spec.ts\", \"*.module.ts\")."
+        },
+        "angular-related-files.openInPreview": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open related files in preview mode (reusing the same tab)."
         }
       }
     },

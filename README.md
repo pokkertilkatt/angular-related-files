@@ -35,6 +35,10 @@ You can customize the extension's behavior through your VS Code settings (`setti
 - **`angular-related-files.ignore`**: A list of glob patterns to ignore when searching for related files.
   - Example: `["**/*.spec.ts", "*.module.ts"]`
 
+- **`angular-related-files.openInPreview`**: Open related files in preview mode (reusing the same tab).
+  - `true` (default) - Files are opened in the same tab.
+  - `false` - Files are opened in a new tab.
+
 ## Contributing
 
 Contributions are welcome! If you have ideas for new features or have found a bug, please open an issue or submit a pull request on the [GitHub repository](https://github.com/pokkertilkatt/angular-related-files).
